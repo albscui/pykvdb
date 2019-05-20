@@ -40,7 +40,7 @@ class KV(BTree):
                                  inclusive=inclusive)
 
     def save(self, filename):
-        filename = filename + '.dqdb'
+        filename = filename + '.pykvdb'
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
             return True
@@ -52,6 +52,6 @@ class KV(BTree):
 
     @staticmethod
     def load(filename):
-        filename = filename + '.dqdb'
+        filename = filename + '.pykvdb'
         with open(filename, 'rb') as f:
             return pickle.load(f)
