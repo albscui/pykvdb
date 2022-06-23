@@ -15,6 +15,15 @@ class BTree:
     def __init__(self, t):
         self.t = t
         self.root = None
+    
+    def print(self):
+        self.__print_helper(self.root, 0)
+    
+    def __print_helper(self, node, level=0):
+        indent = "\t" * level
+        print(indent, node)
+        for child in node.children:
+            self.__print_helper(child, level+1)
 
     def insert_multiple(self, keys):
         for key in keys:
@@ -59,10 +68,13 @@ class BTree:
         self.insert_non_full(node.children[index], key)
 
     def split(self, node):
-        left_node = Node(keys=node.keys[:len(node.keys) // 2],
-                         children=node.children[:len(node.children) // 2 + 1])
-        right_node = Node(keys=node.keys[len(node.keys) // 2:],
-                          children=node.children[len(node.children) // 2:])
+        ki = len(node.keys) // 2
+        ci = len(node.children) // 2
+
+        left_node = Node(keys=node.keys[:ki],
+                         children=node.children[:ci])
+        right_node = Node(keys=node.keys[ki:],
+                          children=node.children[ci:])
         key = right_node.keys.pop(0)
         return left_node, right_node, key
 
