@@ -15,15 +15,15 @@ class BTree:
     def __init__(self, t):
         self.t = t
         self.root = None
-    
+
     def print(self):
         self.__print_helper(self.root, 0)
-    
+
     def __print_helper(self, node, level=0):
         indent = "\t" * level
         print(indent, node)
         for child in node.children:
-            self.__print_helper(child, level+1)
+            self.__print_helper(child, level + 1)
 
     def insert_multiple(self, keys):
         for key in keys:
@@ -48,15 +48,19 @@ class BTree:
         if node.is_leaf():
             index = 0
             for k in node.keys:
-                if key > k: index += 1
-                else: break
+                if key > k:
+                    index += 1
+                else:
+                    break
             node.keys.insert(index, key)
             return
 
         index = 0
         for k in node.keys:
-            if key > k: index += 1
-            else: break
+            if key > k:
+                index += 1
+            else:
+                break
         if len(node.children[index].keys) == 2 * self.t - 1:
             left_node, right_node, new_key = self.split(node.children[index])
             node.keys.insert(index, new_key)
@@ -71,10 +75,8 @@ class BTree:
         ki = len(node.keys) // 2
         ci = len(node.children) // 2
 
-        left_node = Node(keys=node.keys[:ki],
-                         children=node.children[:ci])
-        right_node = Node(keys=node.keys[ki:],
-                          children=node.children[ci:])
+        left_node = Node(keys=node.keys[:ki], children=node.children[:ci])
+        right_node = Node(keys=node.keys[ki:], children=node.children[ci:])
         key = right_node.keys.pop(0)
         return left_node, right_node, key
 
@@ -110,12 +112,14 @@ class BTree:
             if key > term:
                 values.append(key)
             if not node.is_leaf():
-                values += self.greater_than(node.children[index], term,
-                                            upper_bound, inclusive)
+                values += self.greater_than(
+                    node.children[index], term, upper_bound, inclusive
+                )
             index += 1
         if not node.is_leaf():
-            values += self.greater_than(node.children[index], term,
-                                        upper_bound, inclusive)
+            values += self.greater_than(
+                node.children[index], term, upper_bound, inclusive
+            )
         return values
 
     def less_than(self, node, term, lower_bound=None, inclusive=False):
@@ -135,13 +139,13 @@ class BTree:
             if key < term:
                 values.append(key)
             if not node.is_leaf():
-                values += self.less_than(node.children[index], term,
-                                         lower_bound, inclusive)
+                values += self.less_than(
+                    node.children[index], term, lower_bound, inclusive
+                )
             index += 1
 
         if not node.is_leaf() and key <= term:
-            values += self.less_than(node.children[index], term, lower_bound,
-                                     inclusive)
+            values += self.less_than(node.children[index], term, lower_bound, inclusive)
         return values
 
 
@@ -151,7 +155,7 @@ class NodeKey:
         self.value = value
 
     def __repr__(self):
-        return '<NodeKey: ({}, {})>'.format(self.key, self.value)
+        return "<NodeKey: ({}, {})>".format(self.key, self.value)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
